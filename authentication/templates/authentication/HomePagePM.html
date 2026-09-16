@@ -1,0 +1,614 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resident Portal | Society Management System</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --accent: #06b6d4;
+      --surface: #ffffff;
+      --surface-glass: rgba(255, 255, 255, 0.9);
+      --bg: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(238, 242, 255, 0.7) 0%, rgba(248, 250, 252, 1) 90%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    /* Top Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: var(--surface-glass);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo {
+      height: 42px;
+      width: 42px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border: 1.5px solid var(--border);
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-tagline {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: 6px;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .nav-link.active {
+      font-weight: 600;
+    }
+
+    .btn-logout {
+      color: #dc2626 !important;
+      background: #fef2f2;
+      font-weight: 600;
+    }
+
+    .btn-logout:hover {
+      background: #fee2e2 !important;
+      color: #b91c1c !important;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      padding: 8px;
+      width: 40px;
+      height: 40px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: var(--text-main);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      padding: 1rem 1.5rem;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mobile-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.7rem 1rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .mobile-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1150px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #0284c7 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 620px;
+      z-index: 1;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .hero-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      background-color: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+    }
+
+    .btn-hero:hover {
+      background-color: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-badge-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .badge-status {
+      font-size: 1.8rem;
+      font-weight: 800;
+      display: block;
+    }
+
+    .badge-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Distinct Info Cards */
+    .section-header {
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .section-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .icon-indigo { background: #e0e7ff; color: #4338ca; }
+    .icon-emerald { background: #d1fae5; color: #047857; }
+    .icon-amber { background: #fef3c7; color: #b45309; }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .info-list {
+      list-style: none;
+      font-size: 0.85rem;
+      color: #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .info-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-list li span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--primary);
+    }
+
+    /* Notice Banner */
+    .notice-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .notice-icon {
+      color: #16a34a;
+      flex-shrink: 0;
+    }
+
+    .notice-text h4 {
+      color: #15803d;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .notice-text p {
+      color: #166534;
+      font-size: 0.88rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #0f172a;
+      color: #94a3b8;
+      border-top: 1px solid #1e293b;
+      margin-top: auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .footer-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-logo {
+      height: 32px;
+      width: 32px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+    }
+
+    .footer-info h3 {
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .copyright {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    @media (max-width: 868px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-banner { flex-direction: column; align-items: flex-start; }
+      .hero-badge-card { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Navigation (Clean, Non-repetitive) -->
+  <header>
+    <div class="nav-container">
+      <a href="{% url 'homepagepm' %}" class="brand">
+        <img src="{% static 'images/SMS.jpeg' %}" alt="SMS Logo" class="brand-logo">
+        <div class="brand-title">
+          SMS Portal
+          <span class="brand-tagline">Resident Account</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="{% url 'homepagepm' %}" class="nav-link active">Dashboard</a></li>
+          <li><a href="{% url 'guestslist' %}" class="nav-link">Guests List</a></li>
+          <li><a href="{% url 'about' %}" class="nav-link">About Society</a></li>
+          <li><a href="{% url 'login' %}" class="nav-link btn-logout">Logout</a></li>
+        </ul>
+      </nav>
+
+      <button class="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-menu">
+      <a href="{% url 'homepagepm' %}">Dashboard</a>
+      <a href="{% url 'guestslist' %}">Guests List</a>
+      <a href="{% url 'addguests' %}">Pre-Approve Visitor</a>
+      <a href="{% url 'about' %}">About Society</a>
+      <a href="{% url 'login' %}" style="color: #dc2626;">Logout</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Banner with the Single Clear Primary CTA -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <span class="role-badge">Resident Console</span>
+        <h1 class="hero-title">Welcome, Society Member</h1>
+        <p class="hero-subtitle">
+          Pre-register upcoming guests with their photograph and visit details to ensure immediate pass approval at the main gate.
+        </p>
+        <a href="{% url 'addguests' %}" class="btn-hero">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          Pre-Approve New Visitor
+        </a>
+      </div>
+      <div class="hero-badge-card">
+        <span class="badge-status">Gate 01</span>
+        <span class="badge-label">Active & Guarded</span>
+      </div>
+    </section>
+
+    <!-- Distinct Informational Sections (No repeated CTA buttons) -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">Society Information & Protocols</h2>
+        <p class="section-subtitle">Key guidelines and society services for residents</p>
+      </div>
+
+      <div class="card-grid">
+        <!-- Card 1: Visitor Policy Guidelines -->
+        <div class="card">
+          <div class="card-header-icon icon-indigo">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-2.48 9.25a9 9 0 1111.46-11.46 9.003 9.003 0 01-11.46 11.46z"/></svg>
+          </div>
+          <h3 class="card-title">Visitor Entry Guidelines</h3>
+          <p class="card-desc">Protocols for seamless gate clearance of friends, delivery, and services.</p>
+          <ul class="info-list">
+            <li><span class="dot"></span> Pre-approved guests receive instant gate clearance</li>
+            <li><span class="dot"></span> Delivery riders are held at gate past 10:00 PM</li>
+            <li><span class="dot"></span> Cabs allowed up to building foyer for pickups</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Security & Surveillance Info -->
+        <div class="card">
+          <div class="card-header-icon icon-emerald">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="card-title">Gate Security Features</h3>
+          <p class="card-desc">Safety mechanisms active across all society entry and exit points.</p>
+          <ul class="info-list">
+            <li><span class="dot"></span> Automatic timestamping for check-in and check-out</li>
+            <li><span class="dot"></span> Photo identity storage for pre-registered guests</li>
+            <li><span class="dot"></span> CCTV monitoring active 24 hours at the boom barrier</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Gate Intercom & Contact Directory -->
+        <div class="card">
+          <div class="card-header-icon icon-amber">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+          </div>
+          <h3 class="card-title">Important Intercom Numbers</h3>
+          <p class="card-desc">Direct lines for quick assistance from your residence intercom.</p>
+          <ul class="info-list">
+            <li><span class="dot"></span> <strong>Main Gate Security:</strong> Dial Ext. 101</li>
+            <li><span class="dot"></span> <strong>Society Supervisor:</strong> Dial Ext. 102</li>
+            <li><span class="dot"></span> <strong>Maintenance Desk:</strong> Dial Ext. 105</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Notice Banner -->
+    <div class="notice-box">
+      <div class="notice-icon">
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+      </div>
+      <div class="notice-text">
+        <h4>Did you know?</h4>
+        <p>Pre-registering guests allows the security guard to immediately cross-verify their destination flat without interrupting you with an intercom verification call.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Clean Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="{% static 'images/SMS.jpeg' %}" alt="SMS Logo" class="footer-logo">
+        <div class="footer-info">
+          <h3>Society Management System</h3>
+        </div>
+      </div>
+      <div class="copyright">
+        &copy; 2026 Society Management System. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburgerBtn = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    if (hamburgerBtn && mobileMenu) {
+      hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+      });
+    }
+  </script>
+</body>
+</html>

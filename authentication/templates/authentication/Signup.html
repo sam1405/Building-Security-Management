@@ -1,0 +1,96 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <style>
+        body{
+            text-align: center;
+            justify-content: center;
+        }
+
+        img{
+            height: 100px;
+            width: 100px;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .Logo{
+            display: flex;
+            align-items: center;
+        }
+
+        .signup{
+            text-align: center;
+            justify-content: center;
+
+            padding-bottom: 17px;
+            padding-left: 17px;
+            padding-right: 17px;
+            margin-left: 300px;
+            margin-right: 300px;
+            
+            border-color: black;
+            border: 2px solid;
+            border-radius: 10px;
+        }
+
+        input{
+            border-radius: 10px;
+            height: 20px;
+            width: 370px;
+        }
+
+        button{
+            border-radius: 10px;
+            height: 30px;
+            width: 100px;
+        }
+
+        select{
+            text-align: center;
+            height: 20px;
+            width: 370px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup">
+        <div class="Logo">
+            <img src="{% static 'images/SMS.jpeg' %}" alt="">
+            <h1>Ready to join the team?</h1>
+        </div>
+        <b>............................................................................................................</b>
+        <form action="{% url 'signup' %}" method="POST">
+        {% csrf_token %}
+            <br>
+            <label for="name"><b>Enter Your name</b></label><br>
+            <input type="text" name="name" required><br><br>
+             
+            <label for="email"><b>Enter Email</b></label><br>
+            <input type="email" name="email" required><br><br>
+            
+            <label for="buildingname"><b>Enter Building/company Name</b></label><br>
+            <input type="text" name="buildingname" required><br><br>
+            
+            <label for="roles"><b>Your Role</b></label><br>
+            <select name="roles" id="roles">
+                <option value="Watchman">Watchman</option>
+                <option value="Member">Member</option>
+            </select><br><br>
+            
+            <label for="password"><b>Enter Password</b></label><br>
+            <input type="password" name="password" required><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+        <h3>Already Have An Account?</h3>
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+</body>
+</html>

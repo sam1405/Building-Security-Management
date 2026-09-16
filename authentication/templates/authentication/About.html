@@ -1,0 +1,380 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Society Management System</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --navy: #0f172a;
+      --accent: #0ea5e9;
+      --success: #10b981;
+      --surface: #ffffff;
+      --surface-glass: rgba(255, 255, 255, 0.9);
+      --bg: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background-color: var(--surface-glass);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: 40px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      border: 1.5px solid var(--border);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: 8px;
+    }
+
+    .nav-link {
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .nav-link.active {
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1150px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .hero-about {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a8a 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .hero-about h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-about p {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Guidelines Section */
+    .guidelines-section {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .guidelines-section h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--text-main);
+    }
+
+    .guidelines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .guideline-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .guideline-item strong {
+      font-size: 0.95rem;
+      color: var(--navy);
+    }
+
+    .guideline-item span {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Emergency Contacts Box */
+    .emergency-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .emergency-info h3 {
+      color: #991b1b;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .emergency-info p {
+      color: #b91c1c;
+      font-size: 0.88rem;
+    }
+
+    .contact-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      background: #ffffff;
+      border: 1px solid #fca5a5;
+      padding: 0.4rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #991b1b;
+    }
+
+    footer {
+      background-color: #0f172a;
+      color: #94a3b8;
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      margin-top: auto;
+      border-top: 1px solid #1e293b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      {% if request.session.role|lower == 'watchman' %}
+        <a href="{% url 'homepagew' %}" class="brand">
+          <img src="{% static 'images/SMS.jpeg' %}" alt="SMS Logo" class="brand-logo">
+          <span class="brand-title">SMS Security</span>
+        </a>
+      {% else %}
+        <a href="{% url 'homepagepm' %}" class="brand">
+          <img src="{% static 'images/SMS.jpeg' %}" alt="SMS Logo" class="brand-logo">
+          <span class="brand-title">SMS Portal</span>
+        </a>
+      {% endif %}
+
+      <nav>
+        <ul class="nav-links">
+          {% if request.session.role|lower == 'watchman' %}
+            <li><a href="{% url 'homepagew' %}" class="nav-link">Dashboard</a></li>
+          {% else %}
+            <li><a href="{% url 'homepagepm' %}" class="nav-link">Dashboard</a></li>
+          {% endif %}
+          <li><a href="{% url 'guestslist' %}" class="nav-link">Guests List</a></li>
+          <li><a href="{% url 'about' %}" class="nav-link active">About</a></li>
+          <li><a href="{% url 'login' %}" class="nav-link" style="color: #dc2626;">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Overview -->
+    <div class="hero-about">
+      <h1>Society Management System (SMS)</h1>
+      <p>
+        A unified platform streamlining gatekeeper operations, resident visitor pre-approvals, and perimeter security through real-time digital registries.
+      </p>
+    </div>
+
+    <!-- Core Capabilities Grid -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>
+          <svg width="20" height="20" fill="none" stroke="#2563eb" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-2.48 9.25a9 9 0 1111.46-11.46 9.003 9.003 0 01-11.46 11.46z"/></svg>
+          Digital Pass Clearance
+        </h3>
+        <p>Replaces manual paper registers with instant search, timestamped check-ins, and accurate check-out logs.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>
+          <svg width="20" height="20" fill="none" stroke="#2563eb" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+          Resident Pre-Approval
+        </h3>
+        <p>Residents can pre-authorize visitors and upload photos in advance, allowing rapid identity verification by gate guards.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>
+          <svg width="20" height="20" fill="none" stroke="#2563eb" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Daily Shift Records
+        </h3>
+        <p>Security personnel can filter daily guest entries, monitor who is currently inside the premises, and record departures.</p>
+      </div>
+    </div>
+
+    <!-- Community & Gate Guidelines -->
+    <div class="guidelines-section">
+      <h2>Community Visitor Guidelines</h2>
+      <div class="guidelines-grid">
+        <div class="guideline-item">
+          <strong>Delivery & Logistics</strong>
+          <span>Deliveries past 10:00 PM require resident confirmation before gate entry is permitted.</span>
+        </div>
+        <div class="guideline-item">
+          <strong>Cabs & Ride-Hailing</strong>
+          <span>Drop-offs and pick-ups are allowed up to building foyer. Drivers must not park in resident bays.</span>
+        </div>
+        <div class="guideline-item">
+          <strong>Contractors & Maintenance</strong>
+          <span>Work crews must sign in with vehicle plates and carry valid identity cards between 09:00 AM and 06:00 PM.</span>
+        </div>
+        <div class="guideline-item">
+          <strong>Overnight Visitors</strong>
+          <span>Residents are advised to pre-register overnight visitors to avoid midnight security verification delays.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Directory -->
+    <div class="emergency-box">
+      <div class="emergency-info">
+        <h3>Emergency Assistance Directory</h3>
+        <p>For immediate security or medical emergencies within the society</p>
+      </div>
+      <div class="contact-chips">
+        <span class="chip">Main Gate: Ext. 101</span>
+        <span class="chip">Society Office: Ext. 102</span>
+        <span class="chip">Police: 100</span>
+        <span class="chip">Ambulance: 102</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Society Management System (SMS). Safe & Connected Living.
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            text-align: center;
+            justify-content: center;
+        }
+
+        img{
+            height: 100px;
+            width: 100px;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .Logo{
+            display: flex;
+            align-items: center;
+        }
+
+        .login{
+            text-align: center;
+            justify-content: center;
+
+            padding-bottom: 17px;
+            padding-left: 17px;
+            padding-right: 17px;
+            margin-left: 300px;
+            margin-right: 300px;
+
+            border-color: black;
+            border: 2px solid;
+            border-radius: 10px;
+        }
+
+        input{
+            border-radius: 10px;
+            height: 30px;
+            width: 370px;
+        }
+
+        button{
+            border-radius: 10px;
+            height: 30px;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+    <div class="login">
+        <div class="Logo">
+            <img src="{% static 'images/SMS.jpeg' %}" alt="">
+            <h1>Let's get you in Teammate!</h1>
+        </div>
+        <b>............................................................................................................</b>
+        <!-- {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %} -->
+        <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <label for="name">Enter name</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label for="password">Enter Password</label><br>
+        <input type="password" name="password" required><br><br>
+        <button>Submit</button>
+    </form>
+    </div>
+</body>
+</html>

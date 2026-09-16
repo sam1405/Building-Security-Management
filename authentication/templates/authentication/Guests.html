@@ -1,0 +1,545 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guests Registry | Society Management System</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --navy: #0f172a;
+      --accent: #0ea5e9;
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --surface: #ffffff;
+      --surface-glass: rgba(255, 255, 255, 0.9);
+      --bg: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: var(--surface-glass);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: 40px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      border: 1.5px solid var(--border);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-tagline {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: 8px;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .nav-link.active {
+      font-weight: 600;
+    }
+
+    .nav-btn-action {
+      background-color: var(--primary);
+      color: #ffffff !important;
+      font-weight: 600;
+    }
+
+    .nav-btn-action:hover {
+      background-color: var(--primary-hover) !important;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Page Header & Filter Controls */
+    .registry-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      background-color: var(--surface);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-title h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .header-title p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+
+    .filter-tab {
+      padding: 0.45rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+      background-color: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .filter-tab:hover:not(.active) {
+      color: var(--text-main);
+    }
+
+    /* Table Styling */
+    .table-container {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    thead {
+      background-color: #f8fafc;
+      border-bottom: 2px solid var(--border);
+    }
+
+    th {
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.15s;
+    }
+
+    tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    td {
+      padding: 0.9rem 1rem;
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    .guest-photo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--border);
+      display: block;
+    }
+
+    .guest-avatar-placeholder {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .guest-primary {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .guest-phone {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-inside {
+      background-color: var(--success-light);
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-out {
+      background-color: #f1f5f9;
+      color: #64748b;
+      border: 1px solid var(--border);
+    }
+
+    /* Action Buttons */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-checkin {
+      background-color: #10b981;
+      color: #ffffff;
+      box-shadow: 0 1px 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-checkin:hover {
+      background-color: #059669;
+    }
+
+    .btn-checkout {
+      background-color: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 1px 2px rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-checkout:hover {
+      background-color: #dc2626;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg {
+      margin-bottom: 0.75rem;
+      color: #cbd5e1;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #0f172a;
+      color: #94a3b8;
+      margin-top: auto;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      border-top: 1px solid #1e293b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="nav-container">
+      {% if request.session.role|lower == 'watchman' %}
+        <a href="{% url 'homepagew' %}" class="brand">
+          <img src="{% static 'images/SMS.jpeg' %}" alt="SMS Logo" class="brand-logo">
+          <div class="brand-title">
+            SMS Security
+            <span class="brand-tagline">Watchman Console</span>
+          </div>
+        </a>
+      {% else %}
+        <a href="{% url 'homepagepm' %}" class="brand">
+          <img src="{% static 'images/SMS.jpeg' %}" alt="SMS Logo" class="brand-logo">
+          <div class="brand-title">
+            SMS Registers
+            <span class="brand-tagline">Resident Portal</span>
+          </div>
+        </a>
+      {% endif %}
+
+      <nav>
+        <ul class="nav-links">
+          {% if request.session.role|lower == 'watchman' %}
+            <li><a href="{% url 'homepagew' %}" class="nav-link">Dashboard</a></li>
+          {% else %}
+            <li><a href="{% url 'homepagepm' %}" class="nav-link">Dashboard</a></li>
+          {% endif %}
+          <li><a href="{% url 'guestslist' %}" class="nav-link active">Guests List</a></li>
+          <li><a href="{% url 'addguests' %}" class="nav-link nav-btn-action">+ Add Guest</a></li>
+          <li><a href="{% url 'login' %}" class="nav-link" style="color: #dc2626;">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main>
+    <!-- Registry Controls & Filters -->
+    <div class="registry-header">
+      <div class="header-title">
+        <h1>Visitor Entry Registry</h1>
+        <p>Live digital gate pass records and timestamps</p>
+      </div>
+
+      <div class="filter-tabs">
+        <a href="{% url 'guestslist' %}?view=all" class="filter-tab {% if request.GET.view == 'all' %}active{% endif %}">
+          All Visitors
+        </a>
+        <a href="{% url 'guestslist' %}?view=today" class="filter-tab {% if request.GET.view != 'all' %}active{% endif %}">
+          Today's Visitors
+        </a>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Visitor</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Visiting Flat</th>
+            <th>Vehicle No.</th>
+            <th>Purpose</th>
+            <th>In Time</th>
+            <th>Out Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for guest in guests %}
+          <tr>
+            <!-- Visitor Name & Optional Photo -->
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                {% if guest.image %}
+                  <img src="{{ guest.image.url }}" alt="{{ guest.name }}" class="guest-photo">
+                {% else %}
+                  <div class="guest-avatar-placeholder">
+                    {{ guest.name|slice:":1"|upper }}
+                  </div>
+                {% endif %}
+                <span class="guest-primary">{{ guest.name }}</span>
+              </div>
+            </td>
+
+            <!-- Contact -->
+            <td>
+              <span class="guest-phone">{{ guest.contact }}</span>
+            </td>
+
+            <!-- Address -->
+            <td>{{ guest.address }}</td>
+
+            <!-- Destination -->
+            <td>
+              <strong>{{ guest.destination }}</strong>
+            </td>
+
+            <!-- Vehicle -->
+            <td>
+              {% if guest.vehical %}
+                <code>{{ guest.vehical }}</code>
+              {% else %}
+                <span style="color: #94a3b8;">—</span>
+              {% endif %}
+            </td>
+
+            <!-- Purpose -->
+            <td>{{ guest.purpose }}</td>
+
+            <!-- In Time / Check-In Action -->
+            <td>
+              {% if guest.intime %}
+                <strong>{{ guest.intime|date:"d M, H:i" }}</strong>
+              {% else %}
+                <form action="{% url 'checkin' guest.id %}" method="POST" style="margin:0;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-action btn-checkin" title="Record Arrival">
+                    Check In
+                  </button>
+                </form>
+              {% endif %}
+            </td>
+
+            <!-- Out Time / Check-Out Action -->
+            <td>
+              {% if guest.outtime %}
+                <strong>{{ guest.outtime|date:"d M, H:i" }}</strong>
+              {% elif guest.intime %}
+                <form action="{% url 'checkout' guest.id %}" method="POST" style="margin:0;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-action btn-checkout" title="Record Departure">
+                    Check Out
+                  </button>
+                </form>
+              {% else %}
+                <span style="color: #94a3b8;">Pending In</span>
+              {% endif %}
+            </td>
+
+            <!-- Status Badge -->
+            <td>
+              {% if guest.outtime %}
+                <span class="badge badge-out">Departed</span>
+              {% elif guest.intime %}
+                <span class="badge badge-inside">Inside Premises</span>
+              {% else %}
+                <span class="badge" style="background:#fef3c7; color:#b45309; border: 1px solid #fde68a;">Pre-Approved</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="9">
+              <div class="empty-state">
+                <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                <p>No visitor entries found for this view.</p>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Society Management System (SMS). Real-time Visitor Security Register.
+  </footer>
+
+</body>
+</html>
